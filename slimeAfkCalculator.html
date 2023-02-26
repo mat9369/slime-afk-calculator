@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Slime AFK Calculator</title>
+    <script>
+        function get(name) {
+            return Number(document.getElementById(name).value);
+        }
+        function set(name,data) {
+            document.getElementById(name).textContent = data;
+        }
+
+        function calculate() {
+            let perhour = 3600/(get("time")/get("minioncount"));
+            let sulphur = perhour /160;
+            let slime = (perhour * 1.8 * (1 + 0.15 * get("looting"))) /160;
+            let coin = (get("axe") + 0.3 * get("scavenger") + get("bank") + get("hound"))*perhour;
+            let profit = sulphur*get("sulphur")+slime*get("slimeball")+coin;
+            set("resultslime","E Slimeball:" + slime + "/hour");
+            set("resultsulphur","E Sulphur:" + sulphur+ "/hour");
+            set("resultcoins","Coins:"+ coin + "/hour");
+            set("resulttotal","Total:" + profit + "/coins per hour");
+        }
+    </script>
+    <style>
+        label {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <p>Minion:</p>
+    <label>Time Between Actions(sec):<input type="number" value="7.2" id="time"></label>
+    <label>Minion Count:<input type="number" value="27" id="minioncount"></label>
+
+    <p>Equipment:</p>
+    <label>Daedalus Axe (35):<input type="number" value="35" checked id="axe"></label>
+    <label>Looting(Level):<input type="number" value="4" id="looting"></label>
+    <label>Scavenger(Level):<input type="number" value="4" id="scavenger"></label>
+    <label>Bank (Maximum 10):<input type="number" value="10" id="bank"></label>
+    <label>Hound (Maximum 5):<input type="number" value="0" id="hound"></label>
+
+    <p>Price:</p>
+    <label>E Slimeball Price(NPC Sell 800)<input type="number" value="800" id="slimeball"></label>
+    <label>E Sulphur Price(NPC Sell 1600)<input type="number" value="1600" id="sulphur"></label>
+
+    <p><button onclick="calculate()">Calculate</button></p>
+    
+
+    <p>Result:</p>
+    <label id="resultslime">E Slimeball:</label>
+    <label id="resultsulphur">E Sulphur:</label>
+    <label id="resultcoins">Coins(equipment):</label>
+    <label id="resulttotal">Total:</label>
+
+
+</body>
+
+</html>
