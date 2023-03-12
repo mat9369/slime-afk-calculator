@@ -4,69 +4,148 @@
 <head>
     <meta charset="UTF-8">
     <title>Slime AFK Calculator</title>
-    <script>
-        function get(name) {
-            return Number(document.getElementById(name).value);
-        }
-        function set(name,data) {
-            document.getElementById(name).textContent = data;
-        }
 
-        function calculate() {
-            let perhour = 3600/(get("time")/get("minioncount"));
-            if(get("kill") != "") {
-                perhour = get("kill")
-            }
-            //let perhour = 12600;
-            let sulphur = perhour / 160;
-            let slime = (perhour * 1.8 * (1 + 0.15 * get("looting"))) /160;
-            let coin = (get("axe") + 0.3 * get("scavenger") + get("bank") + get("hound"))*perhour;
-            let profit = sulphur*get("sulphur")+slime*get("slimeball")+coin;
-            set("resultkill","Slime Kill:" + perhour + "kill/hour")
-            set("resultslime","E Slimeball:" + slime + "/hour");
-            set("resultsulphur","E Sulphur:" + sulphur+ "/hour");
-            set("resultcoins","Coins(Equipment):"+ coin + "/hour");
-            set("resulttotal","Total:" + profit + "/coins per hour");
-        }
-    </script>
     <style>
         label {
             display: block;
+        }
+
+        .online {
+            float: left;
+            width: 500px;
+            padding: 10px;
+            border: 1px solid #000;
+            margin: 0 10px
+        }
+
+        .offline {
+            float: left;
+            width: 500px;
+            padding: 10px;
+            border: 1px solid #000;
+            margin: 0 10px
         }
     </style>
 </head>
 
 <body>
 
-    <p>Minion:</p>
-    <label>Time Between Actions(sec):<input type="number" value="7.2" id="time"></label>
-    <label>Minion Count:<input type="number" value="27" id="minioncount"></label>
-    
-    <br>Calculator assumes 100% efficiency but reality is -10%.
-    <br>For accurate hourly rate, enter kills per hour using "Blood God Crest" or "Book of Stats".
-    <label>Slime Kills/h:<input type="number" value="" id="kill"></label>
+    <div class="online">
+        <p>Online AFK</p>
+        <p>Minion:</p>
+        <label>Time Between Actions:<input type="number" value="6.2" id="Time"></label>
+        <label>Minion Count:<input type="number" value="27" id="MinionCount"></label>
+        <label>Corrupt Soil:<input type="checkbox" checked id="CorruptSoil"></label>
 
-    <p>Equipment:</p>
-    <label>Daedalus Axe (35):<input type="number" value="35" checked id="axe"></label>
-    <label>Looting Ench(Level):<input type="number" value="4" id="looting"></label>
-    <label>Scavenger Ench(Level):<input type="number" value="4" id="scavenger"></label>
-    <label>Bank Ench (Maximum 10 Coins):<input type="number" value="10" id="bank"></label>
-    <label>Hound (Maximum 5 Coins):<input type="number" value="0" id="hound"></label>
+        <label>
+            <br>Calculator assumes 100% efficiency but reality is -10%.
+            <br>For accurate hourly rate, enter kills per hour using "Blood God Crest" or "Book of Stats".
+        </label>
+        <label>Slime Kills/h:<input type="number" value="" id="KillsPerHour"></label>
 
-    <p>Price:</p>
-    <label>E Slimeball Price(NPC Sell 800)<input type="number" value="800" id="slimeball"></label>
-    <label>E Sulphur Price(NPC Sell 1600)<input type="number" value="1600" id="sulphur"></label>
+        <p>Equipment:</p>
+        <label>Daedalus Axe:<input type="checkbox" checked id="Axe"></label>
+        <label>Looting (Level):<input type="number" value="4" id="Looting"></label>
+        <label>Scavenger (Level):<input type="number" value="4" id="Scavenger"></label>
+        <label>Bank V (Maximum 10 Coins):<input type="number" value="10" id="Bank"></label>
+        <label>Hound (Maximum 5 Coins):<input type="number" value="0" id="Hound"></label>
 
-    <p><button onclick="calculate()">Calculate</button></p>
+        <p>Price:</p>
+        <label>E Slimeball Price (NPC Sell:800)<input type="number" value="800" id="ESlimePrice"></label>
+        <label>E Sulphur Price (NPC Sell:1600)<input type="number" value="1600" id="ESulphurPrice"></label>
 
-    <p>Result:</p>
-    <label id="resultkill">Slime Kill:</label>
-    <label id="resultslime">E Slimeball:</label>
-    <label id="resultsulphur">E Sulphur:</label>
-    <label id="resultcoins">Coins(Equipment):</label>
-    <label id="resulttotal">Total:</label>
+        <p><button onclick="calculate()">Calculate</button></p>
+
+        <p>Result:</p>
+        <label id="ResultKill">Slime kills/Hour:</label>
+        <label id="ResultSlime">E Slimeball/Hour:</label>
+        <label id="ResultSulphur">E Sulphur/Hour:</label>
+        <label id="ResultCoins">Coins(Equipment)/Hour:</label>
+        <label id="ResultTotal">Total Coins/Hour:</label>
+    </div>
+
+    <div class="offline">
+        <p>Offline AFK(unmeasured)</p>
+        <p>Minion:</p>
+        <label>Time Between Actions(Offline):<input type="number" value="7.2" id="OfflineTime"></label>
+        <label>Minion Count:<input type="number" value="27" id="OfflineMinionCount"></label>
+        <label>Corrupt Soil:<input type="checkbox" checked id="OfflineCorruptSoil"></label>
+        <label>Budget Hopper (50%):<input type="radio" name="OfflineHopper" value=0.5></label>
+        <label>Enchanted Hopper (90%):<input type="radio" name="OfflineHopper" checked value=0.9></label>
+
+        <p><button onclick="offlineCalculate()">Calculate</button></p>
+
+        <p>Result:</p>
+        <label id="ResultOfflineHour">Coins/Hour(1 Minion):</label>
+        <label id="ResultOfflineDay">Coins/Day(1 Minion):</label>
+        <label id="ResultOfflineTotalHour">Coins/Hour:</label>
+        <label id="ResultofflineTotalDay">Coins/Day:</label>
+    </div>
+    <script>
+        function get(name) {
+            return Number(document.getElementById(name).value);
+        }
+        function set(name, data) {
+            document.getElementById(name).textContent = data;
+        }
+
+        function calculate() {
+            let killsPerHour = 3600 / (get("Time") / get("MinionCount"));
+
+            if (get("KillsPerHour") != "") {
+                killsPerHour = get("KillsPerHour")
+            }
+
+            let coinsPerKill = (0.3 * get("Scavenger") + get("Bank") + get("Hound"))
+            if (document.getElementById("Axe").checked) {
+                coinsPerKill += 35
+            }
+            let coinsPerHour = coinsPerKill * killsPerHour
+
+            let looting = 1 + 0.15 * get("Looting")
+            let eSlime = (killsPerHour * 1.8 * looting) / 160
+            let eSulphur = 0
+            if (document.getElementById("CorruptSoil").checked) {
+                eSulphur = (killsPerHour * looting) / 160
+            }
+            let profit = eSulphur * get("ESulphurPrice") + eSlime * get("ESlimePrice") + coinsPerHour;
 
 
+            set("ResultKill", "Slime kills/Hour:" + killsPerHour + "kills/h")
+            set("ResultSlime", "E Slimeball/Hour:" + eSlime + "/h");
+            set("ResultSulphur", "E Sulphur/Hour:" + eSulphur + "/h");
+            set("ResultCoins", "Coins(Equipment)/Hour:" + coinsPerHour + "coins/h");
+            set("ResultTotal", "Total Coins/Hour:" + profit + "coins/h");
+
+
+        }
+        function offlineCalculate() {
+            let hopperEfficiency
+            const hopperList = document.getElementsByName("OfflineHopper")
+            for (let i = 0; i < hopperList.length; i++) {
+                if (hopperList[i].checked) {
+                    hopperEfficiency = hopperList[i].value
+                    break
+                }
+            }
+
+            let offlineCoinsPerKill = 5 * 1.8;
+            if (document.getElementById("OfflineCorruptSoil").checked) {
+                offlineCoinsPerKill += 10 + 20;
+            }
+            offlineCoinsPerKill *= hopperEfficiency
+            let offlineSpawnsPerHour = 3600 / (get("OfflineTime") * 2)
+            let offlinecoinsPerHour = offlineCoinsPerKill * offlineSpawnsPerHour
+            let offlinecoinsPerDay = offlinecoinsPerHour * 24
+            let offlineProfitHour = offlinecoinsPerHour * get("OfflineMinionCount")
+            let offlineProfitDay = offlinecoinsPerDay * get("OfflineMinionCount")
+
+            set("ResultOfflineHour", "Coins/Hour(1 Minion):" + offlinecoinsPerHour + "coins/h")
+            set("ResultOfflineDay", "Coins/Day(1 Minion):" + offlinecoinsPerDay + "coins/d")
+            set("ResultOfflineTotalHour", "Coins/Hour:" + offlineProfitHour + "coins/h")
+            set("ResultofflineTotalDay", "Coins/Day:" + offlineProfitDay + "coins/d")
+        }
+    </script>
 </body>
 
 </html>
