@@ -107,7 +107,7 @@
             let eSlime = (killsPerHour * 1.8 * looting) / 160
             let eSulphur = 0
             if (document.getElementById("CorruptSoil").checked) {
-                eSulphur = (killsPerHour * looting) / 160
+                eSulphur = killsPerHour / 160
             }
             let profit = eSulphur * get("ESulphurPrice") + eSlime * get("ESlimePrice") + coinsPerHour;
 
