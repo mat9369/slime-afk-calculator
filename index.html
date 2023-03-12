@@ -34,9 +34,9 @@
         <p>Online AFK</p>
         <p>Minion:</p>
         <label>Time Between Actions:<input type="number" value="6.2" id="Time"></label>
+        <label>(Minion speed can be checked from the minion head in the minion menu.)</label>
         <label>Minion Count:<input type="number" value="27" id="MinionCount"></label>
         <label>Corrupt Soil:<input type="checkbox" checked id="CorruptSoil"></label>
-
         <label>
             <br>Calculator assumes 100% efficiency but reality is -10%.
             <br>For accurate hourly rate, enter kills per hour using "Blood God Crest" or "Book of Stats".
@@ -68,6 +68,7 @@
         <p>Offline AFK(unmeasured)</p>
         <p>Minion:</p>
         <label>Time Between Actions(Offline):<input type="number" value="7.2" id="OfflineTime"></label>
+        <label>(Minion speed can be checked from the minion head in the minion menu.)</label>
         <label>Minion Count:<input type="number" value="27" id="OfflineMinionCount"></label>
         <label>Corrupt Soil:<input type="checkbox" checked id="OfflineCorruptSoil"></label>
         <label>Budget Hopper (50%):<input type="radio" name="OfflineHopper" value=0.5></label>
@@ -111,11 +112,11 @@
             let profit = eSulphur * get("ESulphurPrice") + eSlime * get("ESlimePrice") + coinsPerHour;
 
 
-            set("ResultKill", "Slime kills/Hour:" + killsPerHour + "kills/h")
-            set("ResultSlime", "E Slimeball/Hour:" + eSlime + "/h");
-            set("ResultSulphur", "E Sulphur/Hour:" + eSulphur + "/h");
-            set("ResultCoins", "Coins(Equipment)/Hour:" + coinsPerHour + "coins/h");
-            set("ResultTotal", "Total Coins/Hour:" + profit + "coins/h");
+            set("ResultKill", "Slime kills/Hour:" + Math.floor(killsPerHour) + "kills/h")
+            set("ResultSlime", "E Slimeball/Hour:" + Math.floor(eSlime) + "/h");
+            set("ResultSulphur", "E Sulphur/Hour:" + Math.floor(eSulphur) + "/h");
+            set("ResultCoins", "Coins(Equipment)/Hour:" + Math.floor(coinsPerHour) + "coins/h");
+            set("ResultTotal", "Total Coins/Hour:" + Math.floor(profit) + "coins/h");
 
 
         }
@@ -140,10 +141,10 @@
             let offlineProfitHour = offlinecoinsPerHour * get("OfflineMinionCount")
             let offlineProfitDay = offlinecoinsPerDay * get("OfflineMinionCount")
 
-            set("ResultOfflineHour", "Coins/Hour(1 Minion):" + offlinecoinsPerHour + "coins/h")
-            set("ResultOfflineDay", "Coins/Day(1 Minion):" + offlinecoinsPerDay + "coins/d")
-            set("ResultOfflineTotalHour", "Coins/Hour:" + offlineProfitHour + "coins/h")
-            set("ResultofflineTotalDay", "Coins/Day:" + offlineProfitDay + "coins/d")
+            set("ResultOfflineHour", "Coins/Hour(1 Minion):" + Math.floor(offlinecoinsPerHour) + "coins/h")
+            set("ResultOfflineDay", "Coins/Day(1 Minion):" + Math.floor(offlinecoinsPerDay) + "coins/d")
+            set("ResultOfflineTotalHour", "Coins/Hour:" + Math.floor(offlineProfitHour) + "coins/h")
+            set("ResultofflineTotalDay", "Coins/Day:" + Math.floor(offlineProfitDay) + "coins/d")
         }
     </script>
 </body>
